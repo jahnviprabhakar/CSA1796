@@ -1,29 +1,13 @@
-parent(john, alice).
-parent(mary, jake).
-parent(alice, bob).
-
-% Define rules
-ancestor(X, Y) :- parent(X, Y).
-ancestor(X, Y) :- parent(X, Z), ancestor(Z, Y).
-
-% Forward chaining
-:- dynamic known/2.
-
-infer(KB) :-
-    KB,
-    (KB, !, fail ; true).
-
-update_known(KB) :-
-    KB,
-    assertz(known(KB)).
-
-start :-
-    writeln("Inferred relationships:"),
-    infer(ancestor(john, X)),
-    known(ancestor(john, X)),
-    writeln(X),
+hypothesis(has_fever) :- symptom(high_temperature).
+hypothesis(has_cough) :- symptom(cough).
+hypothesis(has_rash) :- symptom(skin_rash).
+symptom(high_temperature).
+symptom(cough).
+symptom(skin_rash).
+forward_chain :-
+    hypothesis(Hypothesis),
+    writeln('Patient may have: '),
+    writeln(Hypothesis),
+    retract(symptom(Hypothesis)),
     fail.
-start.
-
-% Run the program
-:- start.
+forward_chain.
